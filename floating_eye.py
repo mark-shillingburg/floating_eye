@@ -1,23 +1,15 @@
 #!/usr/bin/python
 
-from picamera import PiCamera
-import numpy as np
-import cv2 
 import pigpio
 from time import time, sleep
+from face_detect import FaceDetector
 
-#face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-#face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
-#face_cascade = cv2.CascadeClassifier('lbpcascade_frontalface.xml')
 
-WIDTH =  640
-HEIGHT = 480
+WIDTH =  1280
+HEIGHT = 720
 
 PIGPIO = pigpio.pi()
-
-camera = PiCamera()
-camera.resolution = (WIDTH, HEIGHT)
+detector = FaceDetector(width=WIDTH, height=HEIGHT)
 
 class Point:
     def __init__(self, x, y):
@@ -68,17 +60,6 @@ def goIdle():
     RL.goHome()
     UD.goHome()
 
-def getFaces():
-    img = np.empty((WIDTH * HEIGHT * 3), dtype=np.uint8)
-    try:
-        camera.capture(img, 'bgr')
-    except Exception as e:
-        print("Exception: {}".format(e))
-        return []
-    img = np.reshape(img,(HEIGHT, WIDTH, 3)) 
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
-    return face_cascade.detectMultiScale(img, 1.5, 3, minSize=(20,20), maxSize=(200,200))
-
 def findBiggest(faces):
     index = 0
     area  = 0
@@ -106,11 +87,12 @@ idle = True
 lastDetection = time()
 
 while True:
-    faces = getFaces()
+    faces = detector.getFaces()
     if len(faces)>0:
         goToFace(findBiggest(faces))
         idle = False
         lastDetection = time()
+        sleep(0.1)
     delta = time() - lastDetection
     if (not idle) and (delta > 6):
         goIdle()

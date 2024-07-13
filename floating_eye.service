@@ -1,0 +1,16 @@
+[Unit]
+Description=Floating Eye Service
+After=multi-user.target
+Requires=pigpiod
+
+[Service]
+Type=simple
+Restart=always
+WorkingDirectory=/home/pi/floating_eye
+User=pi
+Group=pi
+ExecStart=/home/pi/floating_eye/floating_eye.py
+
+[Install]
+WantedBy=multi-user.target
+
