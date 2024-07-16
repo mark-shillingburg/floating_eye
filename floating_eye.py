@@ -7,9 +7,11 @@ from face_detect import FaceDetector
 
 WIDTH =  1280
 HEIGHT = 720
+MINBOX = 25
+MAXBOX = 500
 
 PIGPIO = pigpio.pi()
-detector = FaceDetector(width=WIDTH, height=HEIGHT)
+detector = FaceDetector(width=WIDTH, height=HEIGHT, minPxls= MINBOX, maxPxls= MAXBOX)
 
 class Point:
     def __init__(self, x, y):

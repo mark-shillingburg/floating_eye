@@ -12,6 +12,7 @@ class FaceDetector():
         self.camera = Picamera2()
         self.minBox = (minPxls, minPxls)
         self.maxBox = (maxPxls, maxPxls)
+        print(width, height, self.minBox, self.maxBox)
         self.camera.preview_configuration.main.size=(width, height)
         self.camera.preview_configuration.main.format="RGB888"
         self.camera.start()
