@@ -94,7 +94,7 @@ while True:
         goToFace(findBiggest(faces))
         idle = False
         lastDetection = time()
-        sleep(0.1)
+        sleep(0.15)
     delta = time() - lastDetection
     if (not idle) and (delta > 6):
         goIdle()
